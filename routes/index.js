@@ -6,7 +6,7 @@ var db = require('../dbconfig');
 /* GET home page. */
 router.get('/', async function(req, res, next) {
   let data = await db.query('SELECT * FROM postgresqltable');
-  res.render('index', { title: JSON.stringify(data.rows) });
+  res.render('index', { title: 'PostgreSQL', data: JSON.stringify(data.rows) });
 });
 
 module.exports = router;

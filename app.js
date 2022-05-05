@@ -3,8 +3,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var hbs = require('express-handlebars');
+var { create } = require('express-handlebars');
 var logger = require('morgan');
 var loggerutil = require('./utilities/logger');
 var datalogger = require('./utilities/datalogger');
@@ -72,13 +71,14 @@ fs.appendFile('./log/ServerData.log', '', function (err) {
 });
 
 // view engine setup - Express-Handlebars
-app.engine('hbs', hbs({
-    extname: 'hbs',
-    defaultLayout: 'layout',
-    layoutsDir: __dirname + '/views/'
-}));
+const hbs = create({
+  extname: '.hbs',
+  defaultLayout: 'layout',
+  layoutsDir: __dirname + '/views/'
+});
+app.engine('hbs', hbs.engine);
+app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
 
 // Create a rotating write stream
 var accessLogStream = rfs.createStream('Server.log', {
@@ -113,8 +113,8 @@ app.use(logger(':remote-addr :remote-user :datetime :req[header] :method :url HT
 // Helmet helps for securing Express apps by setting various HTTP headers
 app.use(helmet());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

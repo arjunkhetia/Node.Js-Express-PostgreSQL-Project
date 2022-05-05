@@ -5,7 +5,7 @@ var pool = new pg.Pool({
   port: 5432,
   user: 'postgres',
   password: 'postgres',
-  database: 'postgresqlDB',
+  database: 'postgresqldb',
   ssl: false,
   max: 10,
   min: 1,
